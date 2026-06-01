@@ -51,7 +51,7 @@ class CBOMResourceTest {
         String cbomString =
                 "{"
                         + " \"bomFormat\": \"CycloneDX\","
-                        + " \"specVersion\": \"1.6\","
+                        + " \"specVersion\": \"1.7\","
                         + " \"serialNumber\": \"1\","
                         + " \"version\": 1 }";
         given().pathParam("projectIdentifier", testIdentifier)

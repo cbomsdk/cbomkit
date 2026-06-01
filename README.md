@@ -41,6 +41,19 @@ Next steps:
 > [!NOTE]
 > By default, the service can be accessed at http://localhost:8001
 
+## CLI
+
+CBOMkit also builds a standalone CLI jar for generating CBOM files without starting the web service:
+
+```shell
+mvn -DskipTests package
+java -jar target/cbomkit-2.0.0-SNAPSHOT-cli.jar source /path/to/project --output cbom.json
+```
+
+The `source` command scans Java, Python, and Go source through `cbomkit-lib` and emits CycloneDX CBOM 1.7 JSON. The `dir-assets` and `image` commands delegate directory and container image asset scanning to `cbomkit-theia` when that executable is available. See [SDK, CLI, and CycloneDX 1.7 Remediation](docs/sdk-cli-cyclonedx17-remediation.md) for branch records, local dependency setup, and validation details.
+
+For binary-only distribution and end-user instructions, see [CBOMkit CLI Binary Release and Deployment Guide](docs/binary-release-deployment-guide.md) and [CBOMkit CLI User Guide](docs/cli-user-guide.md). A complete package with source, directory asset, and container image scanning can be assembled with `scripts/package-cli.sh --mode full --theia /path/to/cbomkit-theia`.
+
 Deploy using the helm chart to a kubernetes environment. Pass the domain suffix and the cbomkit database creds via helm parameters.
 ```shell
 # clone the repository 

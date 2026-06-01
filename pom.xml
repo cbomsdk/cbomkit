@@ -27,6 +27,7 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.28.1</quarkus.platform.version>
 
+    <cyclonedx-core-java.version>12.2.0-SNAPSHOT</cyclonedx-core-java.version>
     <cyclonedx-maven-plugin.version>2.9.1</cyclonedx-maven-plugin.version>
     <surefire-plugin.version>3.5.4</surefire-plugin.version>
     <google-java-format.version>1.28.0</google-java-format.version>
@@ -148,7 +149,13 @@
     <dependency>
       <groupId>org.pqca</groupId>
       <artifactId>cbomkit-lib</artifactId>
-      <version>1.1.0</version>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.cyclonedx</groupId>
+      <artifactId>cyclonedx-core-java</artifactId>
+      <version>${cyclonedx-core-java.version}</version>
     </dependency>
 
     <dependency>
@@ -344,6 +351,40 @@
           <outputDirectory>${project.basedir}/bom/</outputDirectory><!-- usually target, if not redefined in pom.xml -->
           <verbose>false</verbose><!-- = ${cyclonedx.verbose} -->
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>cli-runner</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>cli</shadedClassifierName>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.ibm.cli.CBOMKitCli</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <!-- Enable to check dependecy conflicts -->
       <!--plugin>
