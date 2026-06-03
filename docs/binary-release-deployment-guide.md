@@ -6,7 +6,7 @@
 
 发布物应允许使用者在目标机器上直接运行 CBOM 生成能力：
 
-- Java/Python/Go 源码目录扫描：由 `cbomkit` CLI 内置的 `cbomkit-lib` SDK 完成。
+- Java/Python/Go/C/C++ 源码目录扫描：由 `cbomkit` CLI 内置的 `cbomkit-lib` SDK 完成。
 - 目录资产扫描：由外部 `cbomkit-theia` 二进制完成。
 - 容器镜像扫描：由外部 `cbomkit-theia` 二进制完成。
 
@@ -68,6 +68,7 @@ cbomkit-cli-<version>/
 能力范围：
 
 - 支持 `cbomkit source <directory>`。
+- 源码扫描支持 Java、Python、Go、C/C++；C/C++ 扫描包含 OpenSSL EVP、legacy API、SSL/TLS 和 PRNG 检测。
 - 不包含 `cbomkit-theia`，所以 `dir-assets` 和 `image` 需要使用者额外安装并配置 `cbomkit-theia`。
 
 ### 方案 B：完整发布包
@@ -93,6 +94,7 @@ cbomkit-cli-<version>/
 能力范围：
 
 - 支持 `source`。
+- 源码扫描支持 Java、Python、Go、C/C++；C/C++ 扫描包含 OpenSSL EVP、legacy API、SSL/TLS 和 PRNG 检测。
 - 支持 `dir-assets`。
 - 支持 `image`，但目标机器仍需要 Docker/OCI 访问能力。
 

@@ -65,7 +65,7 @@ image       扫描容器镜像中的证书、密钥、secrets、OpenSSL/Java 安
 bin/cbomkit source /path/to/project --output project.cbom.json
 ```
 
-默认会尝试扫描所有支持语言：Java、Python、Go。
+默认会尝试扫描所有支持语言：Java、Python、Go、C/C++。
 
 如果明确知道项目语言，建议指定语言：
 
@@ -79,7 +79,7 @@ bin/cbomkit source /path/to/keycloak \
 
 ```shell
 bin/cbomkit source /path/to/repo \
-  --language java,python,go \
+  --language java,python,go,cxx \
   --output repo.cbom.json
 ```
 
@@ -143,6 +143,18 @@ bin/cbomkit source /path/to/java-repo \
   --java-jar '/path/to/java-repo/**/target/dependency/*.jar' \
   --output java-repo.cbom.json
 ```
+
+## C/C++ OpenSSL 扫描说明
+
+C/C++ 源码扫描使用 CBOMkit CLI 内置的 `sonar-cryptography` C/C++ 规则能力，目前覆盖 OpenSSL EVP API、legacy API、SSL/TLS 函数和 PRNG 调用。语言参数使用 `cxx`：
+
+```shell
+bin/cbomkit source /path/to/cxx-repo \
+  --language cxx \
+  --output cxx-repo.cbom.json
+```
+
+默认索引 `.c`、`.cc`、`.cpp`、`.cxx`、`.h`、`.hh`、`.hpp`、`.hxx` 文件。
 
 ## 目录资产扫描
 

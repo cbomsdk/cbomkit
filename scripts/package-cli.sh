@@ -200,7 +200,7 @@ Build date UTC: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 Included components:
 - bin/cbomkit: launcher for the Java CLI
-- lib/cbomkit-cli.jar: CBOMkit source scanner CLI
+- lib/cbomkit-cli.jar: CBOMkit source scanner CLI for Java, Python, Go, and C/C++ OpenSSL
 EOF
 
 if [ "$mode" = "full" ]; then

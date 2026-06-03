@@ -194,7 +194,7 @@ public final class CBOMKitCli {
             System.err.println(
                     """
                     Usage:
-                      cbomkit source <directory> [--output bom.json] [--language java,python,go]
+                      cbomkit source <directory> [--output bom.json] [--language java,python,go,cxx]
                           [--exclude <regex>] [--java-jar <path-or-glob>] [--java-class-dir <dir>]
                           [--require-java-build] [--subfolder <path>]
 
