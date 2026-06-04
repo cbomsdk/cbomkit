@@ -144,9 +144,9 @@ bin/cbomkit source /path/to/java-repo \
   --output java-repo.cbom.json
 ```
 
-## C/C++ OpenSSL 扫描说明
+## C/C++ 扫描说明
 
-C/C++ 源码扫描使用 CBOMkit CLI 内置的 `sonar-cryptography` C/C++ 规则能力，目前覆盖 OpenSSL EVP API、legacy API、SSL/TLS 函数和 PRNG 调用。语言参数使用 `cxx`：
+C/C++ 源码扫描使用 CBOMkit CLI 内置的 `sonar-cryptography` C/C++ 规则能力，目前覆盖 OpenSSL 和 mbedTLS/PSA Crypto。语言参数使用 `cxx`：
 
 ```shell
 bin/cbomkit source /path/to/cxx-repo \
@@ -155,6 +155,16 @@ bin/cbomkit source /path/to/cxx-repo \
 ```
 
 默认索引 `.c`、`.cc`、`.cpp`、`.cxx`、`.h`、`.hh`、`.hpp`、`.hxx` 文件。
+
+对于通过编译宏启用密码库代码的项目，可以重复传入 `--cxx-define`：
+
+```shell
+bin/cbomkit source /path/to/cxx-repo \
+  --language cxx \
+  --cxx-define LWIP_ALTCP=1 \
+  --cxx-define LWIP_ALTCP_TLS=1 \
+  --output cxx-repo.cbom.json
+```
 
 ## 目录资产扫描
 

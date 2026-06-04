@@ -249,13 +249,12 @@ export default {
     },
     paginatedDetections() {
       if (this.currentPagination == null) {
-        return [];
-      } else {
-        return this.detections.slice(
-          this.currentPagination.start - 1,
-          this.currentPagination.start + this.currentPagination.length - 1
-        );
+        return this.detections.slice(0, this.pagination.pageSizes[0]);
       }
+      return this.detections.slice(
+        this.currentPagination.start - 1,
+        this.currentPagination.start + this.currentPagination.length - 1
+      );
     },
     pagination() {
       return {

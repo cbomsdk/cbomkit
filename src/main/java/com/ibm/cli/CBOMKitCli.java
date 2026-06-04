@@ -93,6 +93,7 @@ public final class CBOMKitCli {
             args.values("exclude").ifPresent(options::excludePatterns);
             args.values("java-jar").ifPresent(options::javaDependencyJars);
             args.values("java-class-dir").ifPresent(options::javaClassDirectories);
+            args.values("cxx-define").ifPresent(options::cxxDefines);
             options.requireJavaBuild(args.hasFlag("require-java-build"));
             args.value("git-url").ifPresent(options::gitUrl);
             args.value("revision").ifPresent(options::revision);
@@ -196,7 +197,7 @@ public final class CBOMKitCli {
                     Usage:
                       cbomkit source <directory> [--output bom.json] [--language java,python,go,cxx]
                           [--exclude <regex>] [--java-jar <path-or-glob>] [--java-class-dir <dir>]
-                          [--require-java-build] [--subfolder <path>]
+                          [--cxx-define <NAME[=VALUE]>] [--require-java-build] [--subfolder <path>]
 
                       cbomkit dir-assets <directory> [--output bom.json] [--theia /path/cbomkit-theia]
                           [--bom source.cbom.json] [--plugin <name>] [--ignore <glob>]

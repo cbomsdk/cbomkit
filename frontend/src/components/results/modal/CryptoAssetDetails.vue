@@ -107,16 +107,28 @@
               <div
                 v-for="(value, index) in getPropertyValues(property.path)"
                 :key="index"
-                style="display: flex; align-items: center; padding-bottom: 2px"
+                class="property-value"
               >
-                {{ getTermFullName(value) ? getTermFullName(value) : value }} 
-                <cv-tooltip
-                  v-if="getTermDescription(value)"
-                  :tip="getTermDescription(value)"
-                  alignment="end"
-                  class="tooltip"
-                >
-                </cv-tooltip>
+                <template v-if="isPlainObject(value)">
+                  <div class="object-summary">{{ getObjectSummary(value) }}</div>
+                  <div
+                    v-for="(detail, detailIndex) in getObjectDetails(value)"
+                    :key="detailIndex"
+                    class="object-detail"
+                  >
+                    {{ detail }}
+                  </div>
+                </template>
+                <template v-else>
+                  {{ getFormattedValue(value) }}
+                  <cv-tooltip
+                    v-if="getTermDescription(value)"
+                    :tip="getTermDescription(value)"
+                    alignment="end"
+                    class="tooltip"
+                  >
+                  </cv-tooltip>
+                </template>
               </div>
             </cv-structured-list-data>
           </cv-structured-list-item>
@@ -215,7 +227,7 @@ export default {
     getCompliancePolicyName,
     filteredProperties() {
       // Filter properties where the value exists
-      return this.propertyPaths.filter(property => this.getPropertyValues(property.path));
+      return this.propertyPaths.filter(property => this.hasPropertyValues(property.path));
     },
     getBomRef() {
       if (this.asset === undefined || this.asset === null) {
@@ -246,6 +258,40 @@ export default {
     getPropertyValues(path) {
       return resolvePath(this.asset, path);
     },
+    hasPropertyValues(path) {
+      const values = this.getPropertyValues(path);
+      return values !== undefined && values !== null && (!Array.isArray(values) || values.length > 0);
+    },
+    isPlainObject(value) {
+      return value !== null && typeof value === "object" && !Array.isArray(value);
+    },
+    getFormattedValue(value) {
+      if (Array.isArray(value)) {
+        return value.map(item => this.getFormattedValue(item)).join(", ");
+      }
+      return getTermFullName(value) ? getTermFullName(value) : value;
+    },
+    getObjectSummary(value) {
+      if (Object.hasOwn(value, "name")) {
+        return this.getFormattedValue(value.name);
+      }
+      return JSON.stringify(value);
+    },
+    getObjectDetails(value) {
+      const detailFields = [
+        { name: "Identifiers", key: "identifiers" },
+        { name: "TLS Groups", key: "tlsGroups" },
+        { name: "TLS Signature Schemes", key: "tlsSignatureSchemes" },
+      ];
+      const details = detailFields
+        .filter(field => Array.isArray(value[field.key]) && value[field.key].length > 0)
+        .map(field => `${field.name}: ${value[field.key].join(", ")}`);
+
+      if (Array.isArray(value.algorithms) && value.algorithms.length > 0) {
+        details.push(`Algorithms: ${value.algorithms.length} refs`);
+      }
+      return details;
+    },
     openAsset(asset) {
       this.$emit('open-asset', asset);
     },
@@ -256,5 +302,21 @@ export default {
 <style scoped>
 .tooltip {
   margin-left: 10px;
+}
+
+.property-value {
+  padding-bottom: 8px;
+}
+
+.object-summary {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.object-detail {
+  color: #525252;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 </style>
